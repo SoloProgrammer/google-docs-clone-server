@@ -13,7 +13,7 @@ const DEFAULT_VALUE = "";
 // Socket operations
 const io = new Server(PORT, {
   cors: {
-    origin: process.env.CLIENT_URL as string,
+    origin: process.env.CLIENT_URL?.split(', '),
   },
 });
 io.on("connection", (socket: Socket) => {
