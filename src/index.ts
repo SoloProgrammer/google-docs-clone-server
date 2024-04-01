@@ -19,9 +19,8 @@ const io = new Server(PORT, {
 io.on("connection", (socket: Socket) => {
   console.log("connected", socket.id);
   socket.on("get-document", async (documentId) => {
-    
     socket.join(documentId);
-    
+
     // load document from DB and send back to client
     const document = await getOrCreateDocument(documentId);
     socket.emit("load-document", document.data);
@@ -31,7 +30,6 @@ io.on("connection", (socket: Socket) => {
     });
 
     socket.on("save-changes", (changes) => {
-      console.log("save-changes hit", changes);
       saveDocument(documentId, changes);
     });
   });
