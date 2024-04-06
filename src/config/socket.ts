@@ -12,7 +12,7 @@ export const connectToSocket = (server:ServerType) => {
     },
   });
   io.on("connection", (socket: Socket) => {
-    console.log("connected", socket.id);
+    console.log("socket connected", socket.id);
     socket.on("get-document", async (documentId) => {
       socket.join(documentId);
 
