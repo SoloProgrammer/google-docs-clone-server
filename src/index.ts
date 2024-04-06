@@ -7,6 +7,7 @@ import { ErrorHandler } from "./middlewares/ErrorHandler.js";
 import { connectPassport } from "./providers/auth.js";
 import expressSession from "express-session";
 import passport from "passport";
+import cors from "cors";
 
 dotenv.config();
 
@@ -14,6 +15,11 @@ connectToDB();
 connectPassport();
 const app = express();
 
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+  })
+);
 app.use(
   expressSession({
     secret: process.env.SESSION_SECRET!,

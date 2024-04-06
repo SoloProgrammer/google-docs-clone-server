@@ -1,11 +1,15 @@
 import { Document, Schema, model } from "mongoose";
 
-export type UserDocument = Document & {
+export type UserType = {
   name: string;
   email: string;
   googleId: string;
   avatar: string;
+  createdAt: string;
+  udpatedAt: string;
 };
+
+export type UserDocument = Document & UserType;
 
 const UserSchema = new Schema<UserDocument>(
   {
