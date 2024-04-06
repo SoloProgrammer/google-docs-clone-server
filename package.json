@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "tsc -w",
-    "build":"tsc",
+    "build": "tsc",
     "server": "nodemon ./dist/index.js",
     "start": "node ./dist/index.js"
   },
@@ -16,11 +16,13 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "mongoose": "^8.2.4",
     "socket.io": "^4.7.5"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.21",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^20.12.2",
     "@types/socket.io": "^3.0.2",
