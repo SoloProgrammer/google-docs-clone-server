@@ -9,7 +9,7 @@ const DocumentSchema = new Schema(
       require: true,
       ref: "users",
     },
-    colaborators: [
+    collaborators: [
       {
         type: Schema.ObjectId,
         ref: "users",

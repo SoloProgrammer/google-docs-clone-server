@@ -21,7 +21,7 @@ router.get(
 
 router.get("/session", authenticate, (req, res) => {
   if (req.user) {
-    res.status(200).json({ session: req.user });
+    return res.status(200).json({ session: req.user });
   }
 
   res.redirect(process.env.LOGIN_URL!);

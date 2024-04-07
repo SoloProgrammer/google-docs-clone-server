@@ -4,7 +4,7 @@ import { Document } from "../schemas/Document.js";
 
 const DEFAULT_VALUE = "";
 
-export const connectToSocket = (server:ServerType) => {
+export const connectToSocket = (server: ServerType) => {
   // Socket operations
   const io = new Server(server, {
     cors: {
@@ -13,11 +13,11 @@ export const connectToSocket = (server:ServerType) => {
   });
   io.on("connection", (socket: Socket) => {
     console.log("socket connected", socket.id);
-    socket.on("get-document", async (documentId) => {
+    socket.on("get-document", async (documentId, uId) => {
       socket.join(documentId);
 
       // load document from DB and send back to client
-      const document = await getOrCreateDocument(documentId);
+      const document = await getOrCreateDocument(documentId, uId);
       socket.emit("load-document", document.data);
 
       socket.on("send-changes", (changes) => {
@@ -35,10 +35,14 @@ export const connectToSocket = (server:ServerType) => {
     await Document.findByIdAndUpdate(documentId, { data: changes });
   }
 
-  async function getOrCreateDocument(documentId: string) {
+  async function getOrCreateDocument(documentId: string, uId: string) {
     const document = await Document.findById(documentId);
     if (document) return document;
 
-    return Document.create({ _id: documentId, data: DEFAULT_VALUE });
+    return Document.create({
+      _id: documentId,
+      data: DEFAULT_VALUE,
+      author: uId,
+    });
   }
 };

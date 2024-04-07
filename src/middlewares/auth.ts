@@ -9,9 +9,11 @@ export const authenticate = (
   const token = req.cookies["connect.sid"];
 
   if (!token) return next(new CustomError("Unauthenticated", 401));
+
   if (token && !req.user) {
-    res.clearCookie('connect.sid')
+    res.clearCookie("connect.sid");
     return next(new CustomError("Unauthenticated", 401));
   }
+
   next();
 };

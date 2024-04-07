@@ -3,6 +3,7 @@ import { connectToDB } from "./utils/connect.js";
 import express, { Request, Response } from "express";
 import { connectToSocket } from "./config/socket.js";
 import UserRoutes from "./routes/user.js";
+import DocumentRoutes from "./routes/document.js";
 import { ErrorHandler } from "./middlewares/ErrorHandler.js";
 import { connectPassport } from "./providers/passport.js";
 import expressSession from "express-session";
@@ -43,6 +44,9 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/auth", UserRoutes);
+app.use("/api/documents", DocumentRoutes);
+
+app.use(ErrorHandler);
 
 const server = app.listen(PORT, () => {
   console.log("Server is running on PORT:", PORT);
@@ -50,4 +54,3 @@ const server = app.listen(PORT, () => {
 
 connectToSocket(server);
 
-app.use(ErrorHandler);
