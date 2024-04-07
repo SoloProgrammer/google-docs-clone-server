@@ -1,5 +1,6 @@
 import express from "express";
 import passport from "passport";
+import { authenticate } from "../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.get(
   })
 );
 
-router.get("/session", (req, res) => {
+router.get("/session", authenticate, (req, res) => {
   if (req.user) {
     res.status(200).json({ session: req.user });
   }

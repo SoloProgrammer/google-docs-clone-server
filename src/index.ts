@@ -4,10 +4,11 @@ import express, { Request, Response } from "express";
 import { connectToSocket } from "./config/socket.js";
 import UserRoutes from "./routes/user.js";
 import { ErrorHandler } from "./middlewares/ErrorHandler.js";
-import { connectPassport } from "./providers/auth.js";
+import { connectPassport } from "./providers/passport.js";
 import expressSession from "express-session";
 import passport from "passport";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -18,8 +19,11 @@ const app = express();
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   })
 );
+app.use(cookieParser());
 app.use(
   expressSession({
     secret: process.env.SESSION_SECRET!,
@@ -30,13 +34,13 @@ app.use(
 
 const PORT = parseInt(process.env.PORT!);
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Server is running");
-});
-
 app.use(passport.authenticate("session"));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.get("/", (req: Request, res: Response) => {
+  res.send("Server is running");
+});
 
 app.use("/api/auth", UserRoutes);
 
