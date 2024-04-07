@@ -9,6 +9,16 @@ const DocumentSchema = new Schema(
       require: true,
       ref: "users",
     },
+    colaborators: [
+      {
+        type: Schema.ObjectId,
+        ref: "users",
+      },
+    ],
+    title: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,
