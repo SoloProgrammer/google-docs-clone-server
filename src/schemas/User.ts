@@ -7,6 +7,7 @@ export type UserType = {
   avatar: string;
   createdAt: string;
   udpatedAt: string;
+  id?: string;
 };
 
 export type UserDocument = Document & UserType;
