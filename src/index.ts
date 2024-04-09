@@ -30,6 +30,10 @@ app.use(
     secret: process.env.SESSION_SECRET!,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      sameSite: "none",
+      secure: true,
+    },
   })
 );
 
@@ -53,4 +57,3 @@ const server = app.listen(PORT, () => {
 });
 
 connectToSocket(server);
-
