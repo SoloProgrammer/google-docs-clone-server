@@ -48,3 +48,15 @@ export const getDocuments = TryCatch(async (req, res) => {
 
   res.status(200).json({ documents });
 });
+
+export const renameDocument = TryCatch(async (req, res) => {
+  const { title, documentId } = req.query;
+  await Document.updateOne(
+    { _id: documentId },
+    {
+      $set: { title },
+    }
+  );
+
+  res.json({ success: true });
+});

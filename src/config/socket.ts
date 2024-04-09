@@ -21,7 +21,6 @@ export const connectToSocket = (server: ServerType) => {
       if (!collaboratorsByDocument[documentId]) {
         collaboratorsByDocument[documentId] = [user!];
       } else {
-
         !collaboratorsByDocument[documentId].some((u) => u.id === uId) &&
           collaboratorsByDocument[documentId].push(user!);
       }
@@ -40,11 +39,18 @@ export const connectToSocket = (server: ServerType) => {
         .emit("collaborators", collaboratorsByDocument[documentId]);
 
       socket.on("send-changes", (changes) => {
-        socket.broadcast.to(documentId).emit("receive-changes", changes);
+        socket.to(documentId).emit("receive-changes", changes);
       });
 
-      socket.on("save-changes", (changes) => {
-        saveDocument(documentId, changes);
+      socket.on("saving-changes", () => {
+        socket.to(documentId).emit("saving-changes");
+      });
+      socket.on("save-changes", async (changes) => {
+        await saveDocument(documentId, changes);
+        // The socket below emits an action within the room but not to the parent socket, which is causing changes. By default, the socket emits actions to other sockets in the room but does not emit the action to itself or the socket making the action. This means that actions are emitted from the client to the server.
+        socket.to(documentId).emit("changes-saved");
+        // the below socket emits changes in the socket it self
+        socket.emit("changes-saved");
       });
 
       socket.on("exit-document", (documentId) => {
@@ -71,7 +77,7 @@ export const connectToSocket = (server: ServerType) => {
         await Document.updateOne(
           { _id: documentId },
           {
-            $push: {
+            $addToSet: {
               collaborators: uId,
             },
           }
@@ -84,7 +90,7 @@ export const connectToSocket = (server: ServerType) => {
     return Document.create({
       _id: documentId,
       data: DEFAULT_VALUE,
-      title:"",
+      title: "",
       author: uId,
     });
   }
